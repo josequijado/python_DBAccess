@@ -3,7 +3,7 @@ DBAccess es una clase basada en mysql_connector pensada para acceder a bases de 
 Permite definir una conexión, un cursor, y ejecutar consultas, tanto de lectura como de inserción, actualización o eliminación de datos.
 También permite destruir un cursor creado, cuando ya no lo vayamos a necesitar más, bien por haber terminado nuestra actividad, o por tener que crear otro, para operar sobre otra base de datos.
 
-## Uso básico de la clase DBAccess##
+## Uso básico de la clase DBAccess
 Para utilizar esta clase en un proyecto se recomienda crear un entorno virtual:
 
 <pre>python -m venv bds</pre>
