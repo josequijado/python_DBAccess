@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queries>
+    <query>
+        CREATE TABLE IF NOT EXISTS estados ( 
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+        estado VARCHAR(255) UNIQUE, 
+        color_fondo CHAR(7), 
+        color_texto CHAR(7), 
+        basico BIT NOT NULL DEFAULT 0, 
+        created_at DATETIME NOT NULL, 
+        updated_at DATETIME NOT NULL)
+    </query>
+    <query>
+        CREATE INDEX index_estado ON estados (estado)
+    </query>
+    <query>
+        ALTER TABLE estados 
+        ADD CONSTRAINT chk_estado_basico CHECK (basico = 1)
+    </query>
+    <query>
+        INSERT INTO estados (id, estado, color_fondo, color_texto, basico, created_at, updated_at) 
+        VALUES (1, 'Planificada', '#B9E6C3', '#006D5B', 1, NOW(), NOW())
+    </query>
+    <query>
+        INSERT INTO estados (id, estado, color_fondo, color_texto, basico, created_at, updated_at) 
+        VALUES (2, 'En desarrollo', '#FFF4CC', '#D9480F', 1, NOW(), NOW())
+    </query>
+    <query>
+        INSERT INTO estados (id, estado, color_fondo, color_texto, basico, created_at, updated_at) 
+        VALUES (3, 'Terminada', '#B3E5FC', '#0D47A1', 1, NOW(), NOW())
+    </query>
+    <query>
+        CREATE TABLE IF NOT EXISTS tareas ( 
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+        titulo VARCHAR(255) NOT NULL, 
+        descripcion TEXT, 
+        estado_id BIGINT UNSIGNED NOT NULL, 
+        fecha_creacion DATETIME NOT NULL, 
+        fecha_actualizacion DATETIME NOT NULL, 
+        FOREIGN KEY (estado_id) REFERENCES estados(id))
+    </query>
+    <query>
+        CREATE TABLE IF NOT EXISTS usuarios ( 
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+        super_root BIT NOT NULL DEFAULT 0, 
+        nombre VARCHAR(50) NOT NULL, 
+        apellidos VARCHAR(100) NOT NULL, 
+        login VARCHAR(50) NOT NULL UNIQUE, 
+        email VARCHAR(100) NOT NULL UNIQUE, 
+        password VARCHAR(64) NOT NULL, 
+        token VARCHAR(255) UNIQUE, 
+        fecha_registro DATETIME NOT NULL, 
+        ultimo_acceso DATETIME NOT NULL, 
+        CONSTRAINT ck_password_length CHECK (LENGTH(password) = 64))
+    </query>
+    <query>
+        CREATE TABLE IF NOT EXISTS tareas_usuarios ( 
+        id_usuario BIGINT UNSIGNED NOT NULL, 
+        id_tarea BIGINT UNSIGNED NOT NULL, 
+        fecha_asignacion DATETIME NOT NULL, 
+        PRIMARY KEY (id_usuario, id_tarea), 
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id), 
+        FOREIGN KEY (id_tarea) REFERENCES tareas(id))
+    </query>
+    <query>
+        CREATE TABLE IF NOT EXISTS permisos ( 
+        id BIGINT UNSIGNED PRIMARY KEY, 
+        nombre VARCHAR(255) UNIQUE NOT NULL)
+    </query>
+    <query>
+        CREATE TABLE IF NOT EXISTS permisos_usuarios ( 
+        id_usuario BIGINT UNSIGNED, 
+        id_permiso BIGINT UNSIGNED, 
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id), 
+        FOREIGN KEY (id_permiso) REFERENCES permisos(id))
+    </query>
+</queries>
